@@ -100,11 +100,11 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://cg-dev.ddns.net:1337/socket.io/socket.io.js"></script>
 
         <script>
 
-            var socket = io.connect('http://localhost:1337');
+            var socket = io.connect('http://cg-dev.ddns.net:1337');
             $('#loginform').submit(function(event){
               event.preventDefault();
               socket.emit('login', {
