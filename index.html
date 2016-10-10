@@ -153,8 +153,9 @@
             });
 
             socket.on('newmsg', function(message){
-                $('#messages').append(`<li class="left clearfix">
-                      <span class="chat-img pull-left">
+		if(message.user.email  == $('#email').val()){
+		$('#messages').append(`<li class="right clearfix">
+                      <span class="chat-img pull-right">
                         <img src="`+message.user.avatar +`" alt="User Avatar">
                       </span>
                       <div class="chat-body clearfix">
@@ -167,6 +168,7 @@
                         </p>
                       </div>
                     </li>`);
+		}
             })
 
             //gestion des utilisateur
