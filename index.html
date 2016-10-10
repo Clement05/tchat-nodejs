@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Jumbotron Template for Bootstrap</title>
+    <title>G-Chat</title>
 
     <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -43,7 +43,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand" href="#">G-Chat</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form id="loginform" name="loginform" class="navbar-form navbar-right">
@@ -60,13 +60,13 @@
     </nav>
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
+    <!-- <div class="jumbotron">
       <div class="container">
         <h1>Hello, world!</h1>
         <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
         <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
       </div>
-    </div>
+    </div> -->
 
 
     <div class="container">
@@ -76,13 +76,13 @@
     <div class="row">
     <div class="col-md-4 bg-white ">
             <div class=" row border-bottom padding-sm" style="height: 40px;">
-              Member
+              Members
             </div>
             
             <!-- =============================================================== -->
             <!-- member list -->
             <ul class="friend-list" id="users">
-                
+                <!-- member list goes here -->
             </ul>
     </div>
         
@@ -91,21 +91,7 @@
       <div class="col-md-8 bg-white ">
             <div class="chat-message">
                 <ul class="chat" id="messages">
-                    
-                    <li class="right clearfix">
-                      <span class="chat-img pull-right">
-                        <img src="http://bootdey.com/img/Content/user_1.jpg" alt="User Avatar">
-                      </span>
-                      <div class="chat-body clearfix">
-                        <div class="header">
-                          <strong class="primary-font">Client member name</strong>
-                          <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> Time</small>
-                        </div>
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at. 
-                        </p>
-                      </div>
-                    </li>
+			<!-- chat message goes here -->
                 </ul>
             </div>
             <form id="formmessage">
@@ -156,6 +142,21 @@
 		if(message.user.email  == $('#email').val()){
 		$('#messages').append(`<li class="right clearfix">
                       <span class="chat-img pull-right">
+                        <img src="`+message.user.avatar +`" alt="User Avatar">
+                      </span>
+                      <div class="chat-body clearfix">
+                        <div class="header">
+                          <strong class="primary-font">`+message.user.id +`</strong>
+                          <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> `+message.h+':'+message.m+`</small>
+                        </div>
+                        <p>
+                          `+ message.message +`
+                        </p>
+                      </div>
+                    </li>`);
+		} else {
+		$('#messages').append(`<li class="left clearfix">
+                      <span class="chat-img pull-left">
                         <img src="`+message.user.avatar +`" alt="User Avatar">
                       </span>
                       <div class="chat-body clearfix">
