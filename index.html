@@ -169,7 +169,7 @@
             //gestion des utilisateur
             socket.on('newuser', function(user){
               //alert(user.avatar);
-              $('#users').append(`<li>
+              $('#users').append(`<li id = ` + user.id + `>
                   <a href="#" class="clearfix">
                     <img src="` + user.avatar + `" alt="" class="img-circle">
                     <div class="friend-name"> 
