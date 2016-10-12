@@ -61,7 +61,16 @@ io.sockets.on('connection', function (socket) {
     	me.id = user.email.replace('@', '-').replace('.','-');
     	me.avatar = 'https://gravatar.com/avatar/' + md5(user.email) + '?s=50';
 
-    	users[me.id] = me;
+	bool addUser = true;
+    	for(var k in users){
+    		if (k.id == me.id){
+			addUser = false;
+		}
+    	}
+	if(addUser){
+		users[me.id] = me;
+	}
+    	
 
     	//socket.broadcast.emit('newuser', me);
     	io.sockets.emit('newuser', me);
