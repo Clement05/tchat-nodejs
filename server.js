@@ -61,19 +61,24 @@ io.sockets.on('connection', function (socket) {
     	me.id = user.email.replace('@', '-').replace('.','-');
     	me.avatar = 'https://gravatar.com/avatar/' + md5(user.email) + '?s=50';
 
-	bool addUser = true;
+	var addUser = true;
     	for(var k in users){
-    		if (k.id == me.id){
+    		console.log("list of user "+k);
+		console.log("id of new user "+me.id);
+		if (k ==  me.id){
+			console.log("the user is already connected");
 			addUser = false;
 		}
     	}
-	if(addUser){
+	if(addUser === true){
 		users[me.id] = me;
+
+    		io.sockets.emit('newuser', me);
 	}
     	
 
     	//socket.broadcast.emit('newuser', me);
-    	io.sockets.emit('newuser', me);
+    	//io.sockets.emit('newuser', me);
     });
 
     socket.on('disconnect', function(){
