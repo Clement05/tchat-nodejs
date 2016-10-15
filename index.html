@@ -174,7 +174,14 @@ function notifyMe(user, msg) {
               $('#message').focus();
 
             });
-
+	    socket.on('me', function(me){
+		console.log("me");
+		var jsonStr = JSON.stringify(me);
+		sessionStorage.setItem('user', jsonStr);
+	    });
+	    socket.on('error', function(err){
+		alert(err);
+	    });
             socket.on('newmsg', function(message){
 		if(message.user.email  == $('#email').val()){
 		$('#messages').append(`<li class="right clearfix">
