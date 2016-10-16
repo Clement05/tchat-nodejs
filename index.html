@@ -110,6 +110,92 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="http://cg-dev.ddns.net:1337/socket.io/socket.io.js"></script>
 <script>
+
+    var socket = io.connect('http://cg-dev.ddns.net:1337');
+    $('#loginform').submit(function(event){
+      event.preventDefault();
+      socket.emit('login', {
+	email : $('#email').val(),
+	password : $('#password').val()
+	})
+    });
+
+    //gestion des messages
+    $('#formmessage').submit(function(e){
+      e.preventDefault();
+      socket.emit('newmsg', {
+	message : $('#message').val()
+	})
+      $('#message').val('');
+      $('#message').focus();
+
+    });
+    socket.on('me', function(me){
+	console.log("me");
+	var jsonStr = JSON.stringify(me);
+	sessionStorage.setItem('user', jsonStr);
+    });
+    socket.on('error', function(err){
+	alert(err);
+    });
+    socket.on('newmsg', function(message){
+	$("#"+message.user.id).find('small.time').html(message.h + ":" + message.m);
+	$("#"+message.user.id).find('div.last-message').html(message.message);
+	if(message.user.email  == $('#email').val()){
+	$('#messages').append(`<li class="right clearfix">
+	      <span class="chat-img pull-right">
+		<img src="`+message.user.avatar +`" alt="User Avatar">
+	      </span>
+	      <div class="chat-body clearfix">
+		<div class="header">
+		  <strong class="primary-font">`+message.user.id +`</strong>
+		  <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> `+message.h+':'+message.m+`</small>
+		</div>
+		<p>
+		  `+ message.message +`
+		</p>
+	      </div>
+	    </li>`);
+	} else {
+	notifyMe(message.user.id, message.message);
+	$('#messages').append(`<li class="left clearfix">
+	      <span class="chat-img pull-left">
+		<img src="`+message.user.avatar +`" alt="User Avatar">
+	      </span>
+	      <div class="chat-body clearfix">
+		<div class="header">
+		  <strong class="primary-font">`+message.user.id +`</strong>
+		  <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> `+message.h+':'+message.m+`</small>
+		</div>
+		<p>
+		  `+ message.message +`
+		</p>
+	      </div>
+	    </li>`);
+	}
+    })
+
+    //gestion des utilisateur
+    socket.on('newuser', function(user){
+      //alert(user.avatar);
+      $('#users').append(`<li id = ` + user.id + `>
+	  <a href="#" class="clearfix">
+	    <img src="` + user.avatar + `" alt="" class="img-circle">
+	    <div class="friend-name"> 
+	      <strong>` + user.id + `</strong>
+	    </div>
+	    <div class="last-message text-muted">Last message goes here</div>
+	    <small class="time text-muted">Last message sent at</small>
+	    <small class="chat-alert label label-danger"></small>
+	  </a>
+	</li>`);
+    });
+
+    socket.on('disuser', function(user){
+      $('#' + user.id).remove();
+    })
+</script>
+<script>
 var focused = true;
 
 window.onfocus = function() {
@@ -153,91 +239,5 @@ function notifyMe(user, msg) {
   // il n'y a pas besoin de l'ennuyer à nouveau.
 }
 </script>
-        <script>
-
-            var socket = io.connect('http://cg-dev.ddns.net:1337');
-            $('#loginform').submit(function(event){
-              event.preventDefault();
-              socket.emit('login', {
-                email : $('#email').val(),
-                password : $('#password').val()
-                })
-            });
-
-            //gestion des messages
-            $('#formmessage').submit(function(e){
-              e.preventDefault();
-              socket.emit('newmsg', {
-                message : $('#message').val()
-                })
-              $('#message').val('');
-              $('#message').focus();
-
-            });
-	    socket.on('me', function(me){
-		console.log("me");
-		var jsonStr = JSON.stringify(me);
-		sessionStorage.setItem('user', jsonStr);
-	    });
-	    socket.on('error', function(err){
-		alert(err);
-	    });
-            socket.on('newmsg', function(message){
-		$("#"+message.user.id).find('small.time').html(message.h + ":" + message.m);
-		$("#"+message.user.id).find('div.last-message').html(message.message);
-		if(message.user.email  == $('#email').val()){
-		$('#messages').append(`<li class="right clearfix">
-                      <span class="chat-img pull-right">
-                        <img src="`+message.user.avatar +`" alt="User Avatar">
-                      </span>
-                      <div class="chat-body clearfix">
-                        <div class="header">
-                          <strong class="primary-font">`+message.user.id +`</strong>
-                          <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> `+message.h+':'+message.m+`</small>
-                        </div>
-                        <p>
-                          `+ message.message +`
-                        </p>
-                      </div>
-                    </li>`);
-		} else {
-		notifyMe(message.user.id, message.message);
-		$('#messages').append(`<li class="left clearfix">
-                      <span class="chat-img pull-left">
-                        <img src="`+message.user.avatar +`" alt="User Avatar">
-                      </span>
-                      <div class="chat-body clearfix">
-                        <div class="header">
-                          <strong class="primary-font">`+message.user.id +`</strong>
-                          <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> `+message.h+':'+message.m+`</small>
-                        </div>
-                        <p>
-                          `+ message.message +`
-                        </p>
-                      </div>
-                    </li>`);
-		}
-            })
-
-            //gestion des utilisateur
-            socket.on('newuser', function(user){
-              //alert(user.avatar);
-              $('#users').append(`<li id = ` + user.id + `>
-                  <a href="#" class="clearfix">
-                    <img src="` + user.avatar + `" alt="" class="img-circle">
-                    <div class="friend-name"> 
-                      <strong>` + user.id + `</strong>
-                    </div>
-                    <div class="last-message text-muted">Last message goes here</div>
-                    <small class="time text-muted">Last message sent at</small>
-                    <small class="chat-alert label label-danger"></small>
-                  </a>
-                </li>`);
-            });
-
-            socket.on('disuser', function(user){
-              $('#' + user.id).remove();
-            })
-        </script>
   </body>
 </html>
