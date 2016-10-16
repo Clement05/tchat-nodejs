@@ -54,7 +54,6 @@ io.sockets.on('connection', function (socket) {
     for(var k in users){
 
     	socket.emit('newuser', users[k]);
-
     }
     //gestion des messages
     socket.on('newmsg', function(message){
@@ -71,7 +70,7 @@ io.sockets.on('connection', function (socket) {
     			io.sockets.emit('newmsg', message);
     			console.log(message);
 		}else{
-			socket.emit('error', err.code);
+			socket.emit('error', err);
 		}
 	});    
 })
@@ -80,14 +79,15 @@ io.sockets.on('connection', function (socket) {
 
     //gestion des log
     socket.on('login', function(user){
+	console.log("Trying to connect user "+user.email);
 	connection.query('SELECT * FROM users WHERE email = ?', [user.email], function(err, rows, fields){
 		if(err){
-			socket.emit('error', err.code);
-			return false;
+			console.error(err)
+			socket.emit('error', err);
 		}
 		if(rows.length === 1 && rows[0].pwd === user.password){
-
-		    	console.log(user);
+			
+		    	console.log("User " + user.email + " is connected");
     			me = user;
     			me.email = user.email;
 			me.id = user.email.replace('@', '-').replace(/\./g,'-');;
@@ -111,6 +111,7 @@ io.sockets.on('connection', function (socket) {
     			//socket.broadcast.emit('newuser', me);
     			//io.sockets.emit('newuser', me);
 		}else{
+			console.log("Insert new user " +user.email+ " in database");
 			var insertUser = {nickname: user.email, email: user.email, pwd: user.password};
 			console.log(insertUser);
 			var query = connection.query('INSERT INTO users SET ?', insertUser, function(err, rows, fields){
