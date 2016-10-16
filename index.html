@@ -110,7 +110,15 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="http://cg-dev.ddns.net:1337/socket.io/socket.io.js"></script>
 <script>
+	var focused = true;
 
+	window.onfocus = function() {
+	    focused = true;
+	};
+	window.onblur = function() {
+	    focused = false;
+	};
+	
     var socket = io.connect('http://cg-dev.ddns.net:1337');
     $('#loginform').submit(function(event){
       event.preventDefault();
@@ -194,18 +202,8 @@
     socket.on('disuser', function(user){
       $('#' + user.id).remove();
     })
-</script>
-<script>
-var focused = true;
 
-window.onfocus = function() {
-    focused = true;
-};
-window.onblur = function() {
-    focused = false;
-};
-
-function notifyMe(user, msg) {
+  function notifyMe(user, msg) {
   // Voyons si le navigateur supporte les notifications
   //if (!("Notification" in window)) {
   //  alert("Ce navigateur ne supporte pas les notifications desktop");
