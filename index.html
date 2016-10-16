@@ -183,6 +183,7 @@ function notifyMe(user, msg) {
 		alert(err);
 	    });
             socket.on('newmsg', function(message){
+		$("#"+message.user.id).find('small.time').html(+message.h+':'+message.m+);
 		if(message.user.email  == $('#email').val()){
 		$('#messages').append(`<li class="right clearfix">
                       <span class="chat-img pull-right">
