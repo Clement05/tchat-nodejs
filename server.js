@@ -7,10 +7,10 @@ var md5 = require('MD5');
 var mysql = require('mysql');
 
 var connection = mysql.createConnection({
-	host: '',
-	user: '',
-	password: '',
-	database: ''
+	host: 'localhost',
+	user: 'gchat',
+	password: 'Grenoble',
+	database: 'gchat'
 });
 
 connection.connect(function(err){
