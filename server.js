@@ -90,7 +90,7 @@ io.sockets.on('connection', function (socket) {
 		    	console.log(user);
     			me = user;
     			me.email = user.email;
-			me.id = user.email.replace('@', '-').replace('.','-');
+			me.id = user.email.replace('@', '-').replace(/\./g,'-');;
     			me.avatar = 'https://gravatar.com/avatar/' + md5(user.email) + '?s=50';
 
 			var addUser = true;
