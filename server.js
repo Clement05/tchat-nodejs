@@ -85,7 +85,9 @@ io.sockets.on('connection', function (socket) {
 			console.error(err)
 			socket.emit('error', err);
 		}
-		if(rows.length === 1 && rows[0].pwd === user.password){
+		var pwd = md5(user.password);
+		console.log(pwd);
+		if(rows.length === 1 && rows[0].pwd === pwd){
 			
 		    	console.log("User " + user.email + " is connected");
     			me = user;
@@ -112,7 +114,8 @@ io.sockets.on('connection', function (socket) {
     			//io.sockets.emit('newuser', me);
 		}else{
 			console.log("Insert new user " +user.email+ " in database");
-			var insertUser = {nickname: user.email, email: user.email, pwd: user.password};
+			var pwd = md5(user.password);
+			var insertUser = {nickname: user.email, email: user.email, pwd: pwd};
 			console.log(insertUser);
 			var query = connection.query('INSERT INTO users SET ?', insertUser, function(err, rows, fields){
 				//console.log(err.code);
