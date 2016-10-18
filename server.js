@@ -87,13 +87,21 @@ io.sockets.on('connection', function (socket) {
 		}
 		var pwd = md5(user.password);
 		console.log(pwd);
-		if(rows.length === 1 && rows[0].pwd === pwd){
+		if(rows.length === 1 && (rows[0].pwd === pwd || rows[0].token == user.token)){
 			
 		    	console.log("User " + user.email + " is connected");
-    			me = user;
+    			var d = new Date();
+			var token = md5(d+user.email);
+			me = {};
+			me.token = token;
     			me.email = user.email;
 			me.id = user.email.replace('@', '-').replace(/\./g,'-');;
     			me.avatar = 'https://gravatar.com/avatar/' + md5(user.email) + '?s=50';
+			
+			var update = connection.query('UPDATE users SET token = ? WHERE id = ?', [token, rows[0].id], function(err1, fields1){
+				console.log(token);
+			});
+			console.log(update.sql);
 
 			var addUser = true;
     			for(var k in users){

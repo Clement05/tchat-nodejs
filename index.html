@@ -110,6 +110,17 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="http://cg-dev.ddns.net:1337/socket.io/socket.io.js"></script>
 <script>
+    var socket = io.connect('http://cg-dev.ddns.net:1337');
+
+    if(sessionStorage.getItem('user') != null || sessionStorage.getItem('user') != undefined){
+    var jsonObj = JSON.parse(sessionStorage.getItem('user'));
+	if(jsonObj != null){
+		socket.emit('login', {
+		email: jsonObj.email,
+		token: jsonObj.token		
+		});
+	}
+    }
     var focused = true;
     window.onfocus = function() {
 	focused = true;
@@ -117,7 +128,6 @@
     window.onblur = function() {
 	focused = false;
     };
-    var socket = io.connect('http://cg-dev.ddns.net:1337');
     $('#loginform').submit(function(event){
       event.preventDefault();
       socket.emit('login', {
