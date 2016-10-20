@@ -62,7 +62,7 @@ io.sockets.on('connection', function (socket) {
 	connection.query('SELECT * FROM users WHERE email = ?', [me.email], function(err, rows, fields){
 
 		
-		if(rows.length === 1 && rows[0].pwd === me.password){
+		if(rows.length === 1 && rows[0].token === me.token){
     			message.user = me;
     			date = new Date();
     			message.h = date.getHours();
